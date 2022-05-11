@@ -1,0 +1,152 @@
+/* head, html and body */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #dedede;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+h1, h2 {
+  font-family: 'Roboto', sans-serif;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+canvas[resize] {
+  width: 100%;
+  height: calc(100% - 160px);
+}
+
+
+.vinfo {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-family: monospace;
+  margin: 5px;
+}
+
+
+
+.btn-filled{
+  cursor: pointer;
+  color: #eee;
+  background-color: #b97941;
+  border-color: none;
+}
+
+.btn {
+  outline: none;
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.nav {
+  width: 850px;
+  margin: auto;
+  overflow: scroll;
+  padding: 0;
+}
+
+@media only screen and (max-width : 860px) {
+    .nav {
+        width: 680px;
+    }
+}
+
+@media only screen and (max-width : 700px) {
+    .nav {
+        width: 510px;
+    }
+}
+
+@media only screen and (max-width : 512px) {
+    .nav {
+        width: 340px;
+    }
+}
+
+.card-container {
+  display: flex;
+  height: 50px;
+}
+
+.show{
+  font-weight: 400;
+  width: 140px;
+  height: 50px;
+  float: left;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 15px;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+.show.active{
+  opacity: 1;
+}
+
+.button-name{
+  color:  #012338;
+  margin: auto 0px auto 10px;
+}
+
+.round-button {
+  background: #012338; 
+  color: white; 
+  min-width: 30px; 
+  min-height: 30px;
+  height:  30px; 
+  margin-top: 10px;
+  border-radius: 50%;
+}
+
+.round-button p {
+  text-align: center;
+  margin-top:  5px;
+}
+/*
+.jump img {
+  height: 26px;
+}
+
+.prevjump img {
+  height: 18px;
+  margin: 5px;
+  margin-right: 15px;
+}
+
+.nextjump img {
+  height: 18px;
+  margin: 5px;
+  margin-left: 15px;
+}
+*/
+
+.selectedch path{
+  fill: red;
+}
+
+#status {
+  position: fixed;
+  padding: 5px;
+  font-size: 15px;
+}

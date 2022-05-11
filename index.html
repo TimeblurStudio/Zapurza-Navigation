@@ -1,0 +1,68 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Mike Cj">
+    <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+    <title>Zapurza:Navigation</title>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.11/paper-full.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.32/Tone.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fpsmeter/0.3.1/fpsmeter.min.js" integrity="sha512-60sOFuolHKjKWm4IcltFrnIvq2slKdPjz1i9WzZMzLDaYSUuwhvxg4Ku/eBnFejYJBuHce9hSvcngBSK9pEV1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- stylesheet Links -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    
+    <? Map Image ?>
+    <img id="HQmap" src="" alt="High Quality map" height="1" style="display: none;">
+
+    <? Map Section - PaperJS canvas ?>
+    <canvas id="main-map-canvas" resize="true"></canvas>
+
+    <ul class="nav">
+        <a href="#" class="show" data-id="hall1">	
+        	<div class="card-container"><div class="round-button"><p>1</p></div><p class="button-name">Hall 1</p></div>
+        </a>
+        <a href="#" class="show" data-id="hall2">	
+        	<div class="card-container"><div class="round-button"><p>2</p></div><p class="button-name">Hall 2</p></div>
+        </a>
+        <a href="#" class="show" data-id="hall3">	
+        	<div class="card-container"><div class="round-button"><p>3</p></div><p class="button-name">Hall 3</p></div>
+        </a>
+        <a href="#" class="show" data-id="hall4">	
+        	<div class="card-container"><div class="round-button"><p>4</p></div><p class="button-name">Hall 4</p></div>
+        </a>
+        <a href="#" class="show" data-id="hall5">	
+        	<div class="card-container"><div class="round-button"><p>5</p></div><p class="button-name">Hall 5</p></div>
+        </a>
+        <a href="#" class="show" data-id="virtualmuseum">
+        	<div class="card-container"><div class="round-button"><p>6</p></div><p class="button-name">Virtual museum</p></div>
+        </a>
+        <a href="#" class="show" data-id="canteen">	
+        	<div class="card-container"><div class="round-button"><p>7</p></div><p class="button-name">Canteen</p></div>
+        </a>
+        <a href="#" class="show" data-id="toilet">	
+        	<div class="card-container"><div class="round-button"><p>8</p></div><p class="button-name">Toilet</p></div>
+        </a>
+        <a href="#" class="show" data-id="audi">	
+        	<div class="card-container"><div class="round-button"><p>9</p></div><p class="button-name">Auditorium</p></div>
+        </a>
+        <a href="#" class="show" data-id="openair">	
+        	<div class="card-container"><div class="round-button"><p>10</p></div><p class="button-name">Open air theater</p></div>
+        </a>
+    </ul>
+
+    <div class="vinfo">v0.1.0</div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
