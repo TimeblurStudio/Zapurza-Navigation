@@ -127,7 +127,7 @@ function initMap(){
 	//
 	// Move the raster to the center of the view
 	mainMap.position = paper.view.center;
-	raster.position.x = paperWidth/2;
+	raster.position.x = 1.05*paperWidth/2;
 	//
 	scrollWidth = mainMap.width*s;
 	scrollHeight = paperHeight;
@@ -152,7 +152,7 @@ function loadLightMask(){
 		//
 		item.scale(lms);
 		item.position = paper.view.center;
-		item.position.x = paperWidth/2;
+		item.position.x = 1.05*paperWidth/2;
 		item.opacity = 1;
 		//
 		lightLayer.addChild(item);
@@ -177,7 +177,7 @@ function loadNavMask(){
 		//
 		item.scale(lms);
 		item.position = paper.view.center;
-		item.position.x = paperWidth/2;
+		item.position.x = 1.05*paperWidth/2;
 		item.opacity = 0.03;
 		//
 		navLayer.addChild(item);
@@ -190,24 +190,30 @@ function loadNavMask(){
 function initNav(){
 	console.log('Initializing navigation');
 	$('.show').click(function(el){
-		resetActive();
-		//
 		if(!$(el.currentTarget).hasClass('active')){
+			resetActive();
+			//
 			$(el.currentTarget).addClass('active');
 			//
 			let chap_id = $(el.currentTarget).attr('data-id');
-			let paperItem = paper.project.getItem({name: chap_id});
-			paperItem.fillColor = '#a7a7a7';
-			paperItem.opacity = 1;
-			paperItem.blendMode = 'color-dodge';
-			/*
-			let rect_id = 'rect1157';
-			let rectItem = paper.project.getItem({name: rect_id});
-			rectItem.fillColor = '#616161';
-			rectItem.opacity = 1;
-			rectItem.blendMode = 'multiply';
-			*/
-		}
+			if(chap_id.includes('toilet')){
+				for(let i=0; i < 4; i++){
+					let paperItem = paper.project.getItem({name: chap_id+'-'+i});
+					paperItem.fillColor = '#b7b7b7';
+					paperItem.opacity = 1;
+					paperItem.blendMode = 'color-dodge';
+				}
+			}else{
+				let paperItem = paper.project.getItem({name: chap_id});
+				if(paperItem != null){
+					paperItem.fillColor = '#b7b7b7';
+					paperItem.opacity = 1;
+					paperItem.blendMode = 'color-dodge';	
+				}
+			}
+			//
+		}else
+			resetActive();
 		//let locX = paper.project.getItem({name: 'nav-ch'+chap_id}).bounds.left;
 	});
 }
@@ -220,16 +226,20 @@ function resetActive(){
 			this_button.removeClass('active');
 			//
 			let chap_id = this_button.attr('data-id');
-			let paperItem = paper.project.getItem({name: chap_id});
-			paperItem.fillColor = '#1a1a1a';
-			paperItem.opacity = 0.01;
-			/*
-			let rect_id = 'rect1157';
-			let rectItem = paper.project.getItem({name: chap_id});
-			rectItem.fillColor = '#1a1a1a';
-			rectItem.opacity = 0.01;
-			rectItem.blendMode = 'multiply';
-			*/
+			if(chap_id.includes('toilet')){
+				for(let i=0; i < 4; i++){
+					let paperItem = paper.project.getItem({name: chap_id+'-'+i});
+					paperItem.fillColor = '#1a1a1a';
+					paperItem.opacity = 0.01;	
+				}
+			}else{
+				let paperItem = paper.project.getItem({name: chap_id});
+				if(paperItem != null){
+					paperItem.fillColor = '#1a1a1a';
+					paperItem.opacity = 0.01;
+				}
+			}
+			//
 		}
 	}
 }

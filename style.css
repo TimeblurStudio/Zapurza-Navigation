@@ -18,7 +18,9 @@ h2 {
 
 canvas[resize] {
   width: 100%;
-  height: calc(100% - 160px);
+  height: calc(100% - 80px);
+  position: static;
+  z-index: -1;
 }
 
 
@@ -63,29 +65,37 @@ canvas[resize] {
   margin: auto;
   overflow: scroll;
   padding: 0;
-}
-
-@media only screen and (max-width : 860px) {
-    .nav {
-        width: 680px;
-    }
-}
-
-@media only screen and (max-width : 700px) {
-    .nav {
-        width: 510px;
-    }
-}
-
-@media only screen and (max-width : 512px) {
-    .nav {
-        width: 340px;
-    }
+  margin-top: -140px;
 }
 
 .card-container {
   display: flex;
   height: 50px;
+}
+
+.emptyshow-above860{
+  font-weight: 400;
+  width: 140px;
+  height: 50px;
+  float: left;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 15px;
+  text-decoration: none;
+  opacity: 0.7;
+}
+
+.emptyshow-below860{
+  font-weight: 400;
+  width: 140px;
+  height: 50px;
+  float: left;
+  padding: 5px 10px;
+  margin: 5px;
+  border-radius: 15px;
+  text-decoration: none;
+  opacity: 0.7;
+  display:  none;
 }
 
 .show{
@@ -102,6 +112,8 @@ canvas[resize] {
 
 .show.active{
   opacity: 1;
+  position: relative;
+  z-index: 100;
 }
 
 .button-name{
@@ -123,30 +135,42 @@ canvas[resize] {
   text-align: center;
   margin-top:  5px;
 }
-/*
-.jump img {
-  height: 26px;
+
+
+@media only screen and (max-width : 860px) {
+    .nav {
+        width: 530px;
+        margin-top: -190px;
+    }
+
+
+    canvas[resize] {
+      width: 100%;
+      height: calc(100% - 180px);
+    }
+
+    .emptyshow-above860{
+      display: none;
+    }
+
+
+    .emptyshow-below860{
+      display: block;
+    }
 }
 
-.prevjump img {
-  height: 18px;
-  margin: 5px;
-  margin-right: 15px;
-}
+@media only screen and (max-width : 512px) {
+    .nav {
+        width: 340px;
+        margin-top: 20px;
+    }
 
-.nextjump img {
-  height: 18px;
-  margin: 5px;
-  margin-left: 15px;
-}
-*/
+    .emptyshow-above860{
+      display: none;
+    }
 
-.selectedch path{
-  fill: red;
-}
 
-#status {
-  position: fixed;
-  padding: 5px;
-  font-size: 15px;
+    .emptyshow-below860{
+      display: none;
+    }
 }
