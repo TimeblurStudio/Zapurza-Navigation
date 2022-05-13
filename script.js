@@ -108,7 +108,7 @@ function loadHQ(){
   	lightLayer.sendToBack();
   	backgroundLayer.sendToBack();
   };
-  downloadingImage.src = './assets/map.png';
+  downloadingImage.src = './assets/map.jpg';
 }
 
 
