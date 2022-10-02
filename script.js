@@ -19,15 +19,23 @@ var navHitOptions = {
 };
 let currentNavLoc = -1;
 let navTweenItem;
+let allMobileLocations = ['hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'virtualmuseum', 'canteen', 'toilet', 'audi', 'openair'];//, 'NA1', 'NA2', 'NA3'
+let currentMobileLocation = 'hall1';
 //
 //
 let lightLayer;
 let backgroundLayer;
 let navLayer;
 //
-// Meter to keep track of FPS
-window.FPSMeter.theme.transparent.container.transform = 'scale(0.75)';
-window.meter = new window.FPSMeter({ margin: '-8px -16px', theme: 'transparent', graph: 1, history: 16 });
+let debug = true;
+//
+if(debug){
+	// Meter to keep track of FPS
+	window.FPSMeter.theme.transparent.container.transform = 'scale(0.75)';
+	window.meter = new window.FPSMeter({ margin: '-8px -16px', theme: 'transparent', graph: 1, history: 16 });	
+	//
+	document.getElementById("version").style.display = 'block';
+}
 //
 console.log('Initializing');
 init();
@@ -42,6 +50,11 @@ init();
  */
 function init(){
 	console.log('init called');
+	$.LoadingOverlay("show", {
+		background : "rgba(0, 0, 0, 0.4)",
+		imageColor : "#d2d2d2",
+		imageResizeFactor : 0.5
+	});
 	//
 	// Setup PAPER canvas
 	let canvas = document.getElementById('main-map-canvas');
@@ -88,7 +101,6 @@ function init(){
 function loadHQ(){
 	console.log('loading High Quality Image');
 	//
-
 	//
   let image = document.getElementById('HQmap');
   var downloadingImage = new Image();
@@ -107,8 +119,10 @@ function loadHQ(){
   	//
   	lightLayer.sendToBack();
   	backgroundLayer.sendToBack();
+  	//
+		$.LoadingOverlay("hide");
   };
-  downloadingImage.src = './assets/map.jpg';
+  downloadingImage.src = './assets/map-og.png';
 }
 
 
@@ -190,6 +204,7 @@ function loadNavMask(){
 function initNav(){
 	console.log('Initializing navigation');
 	$('.show').click(function(el){
+		console.log(el.currentTarget);
 		if(!$(el.currentTarget).hasClass('active')){
 			resetActive();
 			//
@@ -216,7 +231,73 @@ function initNav(){
 			resetActive();
 		//let locX = paper.project.getItem({name: 'nav-ch'+chap_id}).bounds.left;
 	});
+	//
+	$('#locations').on('change', function(){
+		removeHighlight(currentMobileLocation);
+		currentMobileLocation = this.value;
+		highlightLocation(this.value);
+	});
+	//
+	$('#previous').on('click', function(){
+		let index = allMobileLocations.indexOf(currentMobileLocation);	
+		index--;
+		if(index >  allMobileLocations.length)	index = 0;
+		if(index <  0)	index = allMobileLocations.length-1;
+		//
+		removeHighlight(currentMobileLocation);
+		currentMobileLocation = allMobileLocations[index];
+		$('#locations').val(currentMobileLocation);
+		highlightLocation(currentMobileLocation);
+	});
+	$('#next').on('click', function(){
+		let index = allMobileLocations.indexOf(currentMobileLocation);
+		index++;
+		if(index >  allMobileLocations.length-1)	index = 0;
+		if(index <  0)	index = allMobileLocations.length-1;
+		removeHighlight(currentMobileLocation);
+		currentMobileLocation = allMobileLocations[index];
+		$('#locations').val(currentMobileLocation);
+		console.log(currentMobileLocation);
+		highlightLocation(currentMobileLocation);
+	});
 }
+
+function highlightLocation(loc){
+	let chap_id = loc;
+	if(chap_id.includes('toilet')){
+		for(let i=0; i < 4; i++){
+			let paperItem = paper.project.getItem({name: chap_id+'-'+i});
+			paperItem.fillColor = '#b7b7b7';
+			paperItem.opacity = 1;
+			paperItem.blendMode = 'color-dodge';
+		}
+	}else{
+		let paperItem = paper.project.getItem({name: chap_id});
+		if(paperItem != null){
+			paperItem.fillColor = '#b7b7b7';
+			paperItem.opacity = 1;
+			paperItem.blendMode = 'color-dodge';	
+		}
+	}
+}
+
+function removeHighlight(loc){
+	let chap_id = loc;
+	if(chap_id.includes('toilet')){
+		for(let i=0; i < 4; i++){
+			let paperItem = paper.project.getItem({name: chap_id+'-'+i});
+			paperItem.fillColor = '#1a1a1a';
+			paperItem.opacity = 0.01;	
+		}
+	}else{
+		let paperItem = paper.project.getItem({name: chap_id});
+		if(paperItem != null){
+			paperItem.fillColor = '#1a1a1a';
+			paperItem.opacity = 0.01;
+		}
+	}
+}
+
 
 function resetActive(){
 	let all_buttons = $('.nav').children();

@@ -2,7 +2,7 @@
 html, body {
   height: 100%;
   margin: 0;
-  background: #dedede;
+  background: #91754d;
   overflow: hidden;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
@@ -23,16 +23,14 @@ canvas[resize] {
   z-index: -1;
 }
 
-
 .vinfo {
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
   font-family: monospace;
   margin: 5px;
+  display: none;
 }
-
-
 
 .btn-filled{
   cursor: pointer;
@@ -60,12 +58,49 @@ canvas[resize] {
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
 
+.btn.mn{
+	background: none;
+	font-size: 1.5rem;
+	color:  white;
+}
+
 .nav {
   width: 850px;
   margin: auto;
   overflow: scroll;
   padding: 0;
   margin-top: -140px;
+}
+
+.mobilelocations{
+	background: none;
+	border-color: white;
+	border-radius: 10px 10px 0px 0px;
+  font-size: 1.2rem;
+  text-align: center;
+  color:  white;
+}
+
+.mobilenav {
+	display: none;
+	width: 100%; 
+	align-items: center; 
+	justify-content: space-between;
+}
+
+select {
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  padding: 0.8rem 0.5rem;
+  border: 1px solid #333;
+  font-family: inherit;
+  /** for the dropdown indicator */
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1em;
 }
 
 .card-container {
@@ -117,12 +152,12 @@ canvas[resize] {
 }
 
 .button-name{
-  color:  #012338;
+  color:  #000;
   margin: auto 0px auto 10px;
 }
 
 .round-button {
-  background: #012338; 
+  background: #000; 
   color: white; 
   min-width: 30px; 
   min-height: 30px;
@@ -163,6 +198,17 @@ canvas[resize] {
     .nav {
         width: 340px;
         margin-top: 20px;
+        display: none;
+    }
+
+    .mobilenav {
+    	display: flex;
+    }
+
+
+    canvas[resize] {
+      width: 100%;
+      height: calc(100% - 50px);
     }
 
     .emptyshow-above860{
