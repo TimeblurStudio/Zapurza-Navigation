@@ -23,6 +23,16 @@ canvas[resize] {
   z-index: -1;
 }
 
+.mobiletitle {
+	position: absolute;
+	top: 0; 
+	background-color: #171717; 
+	width: 100%; 
+	height: 12vh; 
+	color: white;
+	display: none;
+}
+
 .vinfo {
   position: absolute;
   top: 0;
@@ -61,7 +71,7 @@ canvas[resize] {
 .btn.mn{
 	background: none;
 	font-size: 1.5rem;
-	color:  white;
+	color:  #171717;
 }
 
 .nav {
@@ -74,11 +84,11 @@ canvas[resize] {
 
 .mobilelocations{
 	background: none;
-	border-color: white;
+	border-color: #171717;
 	border-radius: 10px 10px 0px 0px;
   font-size: 1.2rem;
   text-align: center;
-  color:  white;
+  color:  #171717;
 }
 
 .mobilenav {
@@ -203,6 +213,10 @@ select {
 
     .mobilenav {
     	display: flex;
+    }
+
+    .mobiletitle{
+    	display: block;
     }
 
 

@@ -3,31 +3,53 @@
  * AUTHOR:  Mike Cj (mikecj184)
  * Copyright 2022 Timeblur
  * This code is licensed under MIT license (see LICENSE file for more details)
+ * 
+ * Expore this possiblility in WebXR: 
+ * https://www.youtube.com/watch?v=VOMysKbDNxk
+ * https://github.com/MatthewHallberg/IndoorNavPlaceNote
  * ------------------------------------------------
  */
+
+/*
+. Wrong canteen location displayed
+. Show current show and other information on the popup
+. Second click on location opens popup
+. Center map location
+
+
+4th Oct 2022
+. Click on lightNav to highlight 													       DONE
+. Make locations easy to change names for mobile 									DONE
+. Toilet add - texture 																						DONE
+. Wrong toilet location displayed 																DONE
+. Show visitor  																									DONE
+. Speed problem 																									DONE
+*/
+
 //
 let paperHeight, paperWidth;
 //
 //
 let mainMap;
 let navigationFile = null;
-var navHitOptions = {
+let currentNavLoc = -1;
+let navTweenItem;
+let allMobileLocations = ['visitorcenter', 'hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'hall6', 'hall7', 'hall8', 'hall9', 'hall10', 'canteen', 'toilet', 'audi', 'openair'];
+let allMobileNames = ['Visitor center','Virtual museum', 'Gallery 2', 'Gallery 3', 'Gallery 4', 'Gallery 5', 'Gallery 6', 'Gallery 7', 'Gallery 8', 'Gallery 9', 'Gallery 10', 'canteen', 'toilet', 'audi', 'openair'];
+let currentMobileLocation = 'visitorcenter';
+var maskHitOptions = {
 	segments: false,
 	stroke: false,
 	fill: true,
 	tolerance: 5
 };
-let currentNavLoc = -1;
-let navTweenItem;
-let allMobileLocations = ['hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'virtualmuseum', 'canteen', 'toilet', 'audi', 'openair'];//, 'NA1', 'NA2', 'NA3'
-let currentMobileLocation = 'hall1';
 //
 //
 let lightLayer;
 let backgroundLayer;
 let navLayer;
 //
-let debug = true;
+let debug = false;
 //
 if(debug){
 	// Meter to keep track of FPS
@@ -56,6 +78,10 @@ function init(){
 		imageResizeFactor : 0.5
 	});
 	//
+	for(let i=0; i < allMobileLocations.length; i ++){
+		let html_option = '<option value="'+allMobileLocations[i]+'">'+allMobileNames[i]+'</option>';
+		$('#locations').append(html_option);
+	}
 	// Setup PAPER canvas
 	let canvas = document.getElementById('main-map-canvas');
 	paper.setup(canvas);
@@ -67,6 +93,16 @@ function init(){
 	lightLayer = new paper.Layer();
 	navLayer = new paper.Layer();
 
+	if(window.innerWidth < 512){
+		backgroundLayer.scale(0.9);
+		navLayer.scale(0.9);
+		lightLayer.scale(0.9);
+		backgroundLayer.position.y *= 1.1;
+		navLayer.position.y *= 1.1;
+		lightLayer.position.y *= 1.1;
+	}
+	
+
 	// INTERACTIONS
 	//initPanZoom();
 
@@ -76,15 +112,37 @@ function init(){
 	//
 	paper.project.activeLayer = navLayer;
 
+	// Interactions
+	paper.view.onMouseDown = function(event) {
+		mousePos = event.point;
+		//
+		var hitResult = navLayer.hitTest(event.point, maskHitOptions);
+		if(hitResult != null){
+			locname = hitResult.item.name;
+			if(locname.includes('toilet'))	locname = 'toilet';
+			if(allMobileLocations.includes(locname)){
+				console.log('Showing: ' + locname);
+				removeHighlight(currentMobileLocation);
+				currentMobileLocation = locname;
+				highlightLocation(currentMobileLocation);
+				$('#locations').val(currentMobileLocation);
+			}else
+				console.log('Invalid location: ' + locname)
+		}
+	};
+	//
+
 	// Draw PAPER
 	paper.view.draw();
 
-  //
-  // Update on paper events
-  paper.view.onFrame = function(event) {
-    window.meter.tick();
-  };
-
+	if(debug){
+		//
+	  // Update on paper events
+	  paper.view.onFrame = function(event) {
+	    window.meter.tick();
+	  };	
+	}
+  
   //
   //
   //
@@ -113,7 +171,7 @@ function loadHQ(){
     initMap();
     //
     loadLightMask();
-    //loadNavMask();
+    loadNavMask();
 		initNav();
 		//
   	//
@@ -180,7 +238,7 @@ function loadNavMask(){
 	console.log('Loading navigation mask');
 	//
 	//
-	let navPath = './assets/Map-mask.svg';
+	let navPath = './assets/Map-blend.svg';
 	paper.project.importSVG(navPath, function(item){
 		console.log('Loaded Navigation');
 		let navigationFile = item;
@@ -193,6 +251,7 @@ function loadNavMask(){
 		item.position = paper.view.center;
 		item.position.x = 1.05*paperWidth/2;
 		item.opacity = 0.03;
+		//
 		//
 		navLayer.addChild(item);
 		//
@@ -265,6 +324,7 @@ function initNav(){
 function highlightLocation(loc){
 	let chap_id = loc;
 	if(chap_id.includes('toilet')){
+		chap_id = 'toilet';
 		for(let i=0; i < 4; i++){
 			let paperItem = paper.project.getItem({name: chap_id+'-'+i});
 			paperItem.fillColor = '#b7b7b7';
