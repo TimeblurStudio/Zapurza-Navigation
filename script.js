@@ -11,14 +11,19 @@
  */
 
 /*
-. Wrong canteen location displayed
+TODO:
 . Show current show and other information on the popup
 . Second click on location opens popup
-. Center map location
+
+
+20th Oct 2022
+. Fix wrong canteen location displayed 														DONE
+. Center map location & Fix Header																DONE
+. Add Foyer and Plaza																							DONE
 
 
 4th Oct 2022
-. Click on lightNav to highlight 													       DONE
+. Click on lightNav to highlight 													       	DONE
 . Make locations easy to change names for mobile 									DONE
 . Toilet add - texture 																						DONE
 . Wrong toilet location displayed 																DONE
@@ -34,9 +39,9 @@ let mainMap;
 let navigationFile = null;
 let currentNavLoc = -1;
 let navTweenItem;
-let allMobileLocations = ['visitorcenter', 'hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'hall6', 'hall7', 'hall8', 'hall9', 'hall10', 'canteen', 'toilet', 'audi', 'openair'];
-let allMobileNames = ['Visitor center','Virtual museum', 'Gallery 2', 'Gallery 3', 'Gallery 4', 'Gallery 5', 'Gallery 6', 'Gallery 7', 'Gallery 8', 'Gallery 9', 'Gallery 10', 'canteen', 'toilet', 'audi', 'openair'];
-let currentMobileLocation = 'visitorcenter';
+let allMobileLocations = ['visitorcenter', 'foyer', 'hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'plaza', 'hall6', 'hall7', 'hall8', 'hall9', 'hall10', 'canteen', 'toilet', 'audi', 'audifoyer', 'openair'];
+let allMobileNames = ['Visitor center', 'Entrance foyer', 'Virtual museum', 'Gallery 2', 'Gallery 3', 'Gallery 4', 'Gallery 5', 'Plaza', 'Gallery 6', 'Gallery 7', 'Gallery 8', 'Gallery 9', 'Gallery 10', 'Canteen', 'Toilets', 'Auditorium', 'Auditorium foyer', 'Open air theater'];
+let currentMobileLocation = '';
 var maskHitOptions = {
 	segments: false,
 	stroke: false,
@@ -173,6 +178,7 @@ function loadHQ(){
     loadLightMask();
     loadNavMask();
 		initNav();
+		initMobileMenu();
 		//
   	//
   	lightLayer.sendToBack();
@@ -180,9 +186,14 @@ function loadHQ(){
   	//
 		$.LoadingOverlay("hide");
   };
-  downloadingImage.src = './assets/map-og.png';
+  downloadingImage.src = './assets/map-og-0.4.0.png';
 }
 
+
+function initMobileMenu(){
+  for(let i=0; i < allMobileLocations.length; i++)
+  	$('#loading').append('<option value="'+allMobileLocations[i]+'">'+allMobileNames[i]+'</option>')
+}
 
 function initMap(){
 	//
@@ -213,7 +224,7 @@ function loadLightMask(){
 	console.log('Loading light mask');
 	//
 	//
-	let navPath = './assets/Map-blend.svg';
+	let navPath = './assets/Map-blend-0.4.0.svg';
 	paper.project.importSVG(navPath, function(item){
 		console.log('Loaded light mask');
 		let lightFile = item;
@@ -238,7 +249,7 @@ function loadNavMask(){
 	console.log('Loading navigation mask');
 	//
 	//
-	let navPath = './assets/Map-blend.svg';
+	let navPath = './assets/Map-blend-0.4.0.svg';
 	paper.project.importSVG(navPath, function(item){
 		console.log('Loaded Navigation');
 		let navigationFile = item;
@@ -290,13 +301,11 @@ function initNav(){
 			resetActive();
 		//let locX = paper.project.getItem({name: 'nav-ch'+chap_id}).bounds.left;
 	});
-	//
 	$('#locations').on('change', function(){
 		removeHighlight(currentMobileLocation);
 		currentMobileLocation = this.value;
 		highlightLocation(this.value);
 	});
-	//
 	$('#previous').on('click', function(){
 		let index = allMobileLocations.indexOf(currentMobileLocation);	
 		index--;
@@ -316,7 +325,6 @@ function initNav(){
 		removeHighlight(currentMobileLocation);
 		currentMobileLocation = allMobileLocations[index];
 		$('#locations').val(currentMobileLocation);
-		console.log(currentMobileLocation);
 		highlightLocation(currentMobileLocation);
 	});
 }
@@ -332,6 +340,7 @@ function highlightLocation(loc){
 			paperItem.blendMode = 'color-dodge';
 		}
 	}else{
+		console.log('Highlight: ' + chap_id);
 		let paperItem = paper.project.getItem({name: chap_id});
 		if(paperItem != null){
 			paperItem.fillColor = '#b7b7b7';
@@ -346,14 +355,17 @@ function removeHighlight(loc){
 	if(chap_id.includes('toilet')){
 		for(let i=0; i < 4; i++){
 			let paperItem = paper.project.getItem({name: chap_id+'-'+i});
-			paperItem.fillColor = '#1a1a1a';
+			paperItem.fillColor = '#000';
 			paperItem.opacity = 0.01;	
+			paperItem.blendMode = 'normal';	
 		}
 	}else{
+		console.log('Remove: ' + chap_id);
 		let paperItem = paper.project.getItem({name: chap_id});
 		if(paperItem != null){
-			paperItem.fillColor = '#1a1a1a';
+			paperItem.fillColor = '#000';
 			paperItem.opacity = 0.01;
+			paperItem.blendMode = 'normal';	
 		}
 	}
 }
@@ -370,13 +382,13 @@ function resetActive(){
 			if(chap_id.includes('toilet')){
 				for(let i=0; i < 4; i++){
 					let paperItem = paper.project.getItem({name: chap_id+'-'+i});
-					paperItem.fillColor = '#1a1a1a';
+					paperItem.fillColor = '#000';
 					paperItem.opacity = 0.01;	
 				}
 			}else{
 				let paperItem = paper.project.getItem({name: chap_id});
 				if(paperItem != null){
-					paperItem.fillColor = '#1a1a1a';
+					paperItem.fillColor = '#000';
 					paperItem.opacity = 0.01;
 				}
 			}
