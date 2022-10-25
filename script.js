@@ -12,8 +12,18 @@
 
 /*
 TODO:
-. Show current show and other information on the popup
+. Show current and other information on the popup
 . Second click on location opens popup
+. popup should show an image banner
+. Dashboard for changing images 															
+. pan and zoom
+
+
+23rd Oct 2022:
+. Studio area not shown																						DONE
+. Gallery 7 hig	hlight problem 																	  DONE
+. Show corresponding color in the bottom 													DONE						
+. Marathi and English text 																				DONE
 
 
 20th Oct 2022
@@ -39,9 +49,13 @@ let mainMap;
 let navigationFile = null;
 let currentNavLoc = -1;
 let navTweenItem;
-let allMobileLocations = ['visitorcenter', 'foyer', 'hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'plaza', 'hall6', 'hall7', 'hall8', 'hall9', 'hall10', 'canteen', 'toilet', 'audi', 'audifoyer', 'openair'];
-let allMobileNames = ['Visitor center', 'Entrance foyer', 'Virtual museum', 'Gallery 2', 'Gallery 3', 'Gallery 4', 'Gallery 5', 'Plaza', 'Gallery 6', 'Gallery 7', 'Gallery 8', 'Gallery 9', 'Gallery 10', 'Canteen', 'Toilets', 'Auditorium', 'Auditorium foyer', 'Open air theater'];
-let currentMobileLocation = '';
+let allMobileLocations = ['visitorcenter', 'foyer', 'hall1', 'hall2', 'hall3', 'hall4', 'hall5', 'plaza', 'hall6', 'hall7', 'hall8', 'hall9', 'hall10', 'studio', 'canteen', 'toilet', 'audi', 'audifoyer', 'openair'];
+let allMobileNames = ['Visitor center', 'Entrance foyer', 'Virtual museum', 'Gallery 2', 'Gallery 3', 'Gallery 4', 'Gallery 5', 'Plaza', 'Gallery 6', 'Gallery 7', 'Gallery 8', 'Gallery 9', 'Gallery 10', 'Studio', 'Canteen', 'Toilets', 'Auditorium', 'Auditorium foyer', 'Open air theater'];
+let allMobileNamesMarathi = ['आगमन केंद्र', 'प्रवेशद्वार','वर्चुअल संग्रहालय', 'गैलरी 2', 'गैलरी 3', 'गैलरी 4', 'गैलरी 5', 'चौक','गैलरी 6', 'गैलरी 7', 'गैलरी 8', 'गैलरी 9', 'गैलरी 10', 'स्टूडियो', 'खाने का क्षेत्र', 'शौचालय', 'ऑडिटोरियम', 'ऑडिटोरियम फ्यूअर', 'खुला वातावरणीय थिएटर'];
+let allMobileColors = ['#c98169', '#f7f7f7', '#c98169', '#c98169', '#c98169', '#c98169', '#c98169', '#f7f7f7', '#c98169', '#c98169', '#c98169', '#c98169', '#c98169', '#c98169', '#f7f7f7', '#c98169', '#c98169', '#f7f7f7', '#f7f7f7']; 
+let currentMobileLocation = 'foyer';
+let isMarathi = true;
+
 var maskHitOptions = {
 	segments: false,
 	stroke: false,
@@ -82,11 +96,43 @@ function init(){
 		imageColor : "#d2d2d2",
 		imageResizeFactor : 0.5
 	});
-	//
+	// Add mobile location selectors
 	for(let i=0; i < allMobileLocations.length; i ++){
 		let html_option = '<option value="'+allMobileLocations[i]+'">'+allMobileNames[i]+'</option>';
 		$('#locations').append(html_option);
 	}
+	// Language selection
+	if(localStorage.getItem('isMarathi') == 'false')
+		isMarathi = false;
+	else
+		isMarathi = true;
+	if(isMarathi){
+		$($("ul.buttonGroup").find("li")[1]).addClass("selected");
+		$($("ul.buttonGroup").find("li")[0]).removeClass("selected");
+	}else{
+		$($("ul.buttonGroup").find("li")[0]).addClass("selected");
+		$($("ul.buttonGroup").find("li")[1]).removeClass("selected");
+	}
+	// Language selection on change
+	$("ul.buttonGroup").click(function (event) {
+		$("li", this)
+		.removeClass("selected")
+		.filter(event.target)
+		.addClass("selected");
+		//
+		// Get selected language from ul
+		let selectedLang = $(this).find('li.selected').attr('id');
+		if(selectedLang == 'marathi'){
+			isMarathi = true;
+			localStorage.setItem('isMarathi', 'true');
+		}else{
+			isMarathi = false;
+			localStorage.setItem('isMarathi', 'false');
+		}
+		updateUItoLanguage();
+	});
+	updateUItoLanguage();
+	
 	// Setup PAPER canvas
 	let canvas = document.getElementById('main-map-canvas');
 	paper.setup(canvas);
@@ -131,6 +177,7 @@ function init(){
 				currentMobileLocation = locname;
 				highlightLocation(currentMobileLocation);
 				$('#locations').val(currentMobileLocation);
+				$('.mobilelocations').css('color', allMobileColors[allMobileLocations.indexOf(currentMobileLocation)]);
 			}else
 				console.log('Invalid location: ' + locname)
 		}
@@ -160,6 +207,23 @@ function init(){
   //
 }
 
+function updateUItoLanguage(){
+	if(isMarathi){
+		$($('#language').children()[0]).html('वर क्लिक करा');
+		let length = $('#locations').children().length;
+		for(let i=1; i < length; i++)
+			$($('#locations').children()[i]).html(allMobileNamesMarathi[i-1]);
+		$('#previous').html('< मागील');
+		$('#next').html('पुढे >');
+	}else{
+		$($('#language').children()[0]).html('Click to navigate');
+		let length = $('#locations').children().length;
+		for(let i=1; i < length; i++)
+			$($('#locations').children()[i]).html(allMobileNames[i-1]);
+		$('#previous').html('< prev');
+		$('#next').html('next >');
+	}
+}
 
 function loadHQ(){
 	console.log('loading High Quality Image');
@@ -185,8 +249,15 @@ function loadHQ(){
   	backgroundLayer.sendToBack();
   	//
 		$.LoadingOverlay("hide");
+		// Loaded - highlight current location
+		setTimeout(function(){
+			highlightLocation(currentMobileLocation);
+			$('#locations').val(currentMobileLocation);
+			$('.mobilelocations').css('color', allMobileColors[allMobileLocations.indexOf(currentMobileLocation)]);
+			$('#locations').show();
+		}, 1000);
   };
-  downloadingImage.src = './assets/map-og-0.4.0.png';
+  downloadingImage.src = './assets/map-og-0.5.4.png';
 }
 
 
@@ -224,7 +295,7 @@ function loadLightMask(){
 	console.log('Loading light mask');
 	//
 	//
-	let navPath = './assets/Map-blend-0.4.0.svg';
+	let navPath = './assets/Map-blend-0.5.4.svg';
 	paper.project.importSVG(navPath, function(item){
 		console.log('Loaded light mask');
 		let lightFile = item;
@@ -249,7 +320,7 @@ function loadNavMask(){
 	console.log('Loading navigation mask');
 	//
 	//
-	let navPath = './assets/Map-blend-0.4.0.svg';
+	let navPath = './assets/Map-blend-0.5.4.svg';
 	paper.project.importSVG(navPath, function(item){
 		console.log('Loaded Navigation');
 		let navigationFile = item;
@@ -305,6 +376,7 @@ function initNav(){
 		removeHighlight(currentMobileLocation);
 		currentMobileLocation = this.value;
 		highlightLocation(this.value);
+		$('.mobilelocations').css('color', allMobileColors[allMobileLocations.indexOf(currentMobileLocation)]);
 	});
 	$('#previous').on('click', function(){
 		let index = allMobileLocations.indexOf(currentMobileLocation);	
@@ -315,6 +387,7 @@ function initNav(){
 		removeHighlight(currentMobileLocation);
 		currentMobileLocation = allMobileLocations[index];
 		$('#locations').val(currentMobileLocation);
+		$('.mobilelocations').css('color', allMobileColors[allMobileLocations.indexOf(currentMobileLocation)]);
 		highlightLocation(currentMobileLocation);
 	});
 	$('#next').on('click', function(){
@@ -325,6 +398,7 @@ function initNav(){
 		removeHighlight(currentMobileLocation);
 		currentMobileLocation = allMobileLocations[index];
 		$('#locations').val(currentMobileLocation);
+		$('.mobilelocations').css('color', allMobileColors[allMobileLocations.indexOf(currentMobileLocation)]);
 		highlightLocation(currentMobileLocation);
 	});
 }

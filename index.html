@@ -18,10 +18,14 @@
     <!-- stylesheet Links -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=0.1.2">
+    <link rel="stylesheet" href="./style.css?v=0.5.4">
   </head>
   <body>
 
+    <ul class="buttonGroup" id="language-selector">
+      <li id="english" style="border-radius: 0px 0px 0px 5px;">A</li>
+      <li id="marathi" class="selected" style="border-radius: 0px 0px 5px 0px;">आ</li>
+    </ul>
 
     <img src="assets/Zapurza_Title.jpg" class="mobiletitle" />
     
@@ -80,14 +84,14 @@
 
     <div class="mobilenav">
     	<button id="previous" class="btn mn">< prev</button>
-    	<select class="mobilelocations" name="locations" id="locations">
+    	<select class="mobilelocations" name="locations" id="locations" style="display: none;">
     		<option selected disabled value="">Click to Navigate</option>
     	</select>
     	<button id="next" class="btn mn">next ></button>
     </div>
 
-    <div class="vinfo" id="version">v0.4.0</div>
+    <div class="vinfo" id="version">v0.5.4</div>
 
-    <script src="./script.js?v=0.4.0"></script>
+    <script src="./script.js?v=0.5.4"></script>
   </body>
 </html>
